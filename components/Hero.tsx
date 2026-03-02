@@ -1,5 +1,5 @@
 "use client";
-import { motion } from "framer-motion";
+import { motion, Variants } from "framer-motion";
 
 interface HeroProps {
   onStart: () => void;
@@ -7,19 +7,19 @@ interface HeroProps {
 }
 
 export default function Hero({ onStart, hearts }: HeroProps) {
-  // Variabel untuk animasi sekuensial agar kode lebih rapi
-  const containerVariants = {
+  // Kita tambahkan tipe data "Variants" dari framer-motion biar TypeScript nggak protes
+  const containerVariants: Variants = {
     hidden: { opacity: 0 },
     visible: {
       opacity: 1,
       transition: {
-        staggerChildren: 0.8, // Jeda antar elemen muncul (bikin lebih smooth)
+        staggerChildren: 0.8,
         delayChildren: 0.5,
       },
     },
   };
 
-  const itemVariants = {
+  const itemVariants: Variants = {
     hidden: { opacity: 0, y: 20, filter: "blur(10px)" },
     visible: { 
       opacity: 1, 
@@ -35,13 +35,18 @@ export default function Hero({ onStart, hearts }: HeroProps) {
       variants={containerVariants}
       initial="hidden"
       animate="visible"
-      exit={{ opacity: 0, scale: 1.1, filter: "blur(20px)", transition: { duration: 0.8 } }} 
+      exit={{ 
+        opacity: 0, 
+        scale: 1.1, 
+        filter: "blur(20px)", 
+        transition: { duration: 0.8 } 
+      }} 
       className="h-screen flex items-center justify-center p-6 relative z-10 overflow-hidden"
     >
       {/* Efek Floating Hearts Background */}
       {hearts.map((style, i) => (
         <motion.div 
-          key={i} 
+          key={`heart-${i}`} // Key yang lebih unik
           initial={{ opacity: 0 }}
           animate={{ y: [0, -60, 0], opacity: [0, 0.4, 0], scale: [1, 1.2, 1] }} 
           transition={{ duration: 5, delay: style.delay, repeat: Infinity }} 
@@ -53,7 +58,6 @@ export default function Hero({ onStart, hearts }: HeroProps) {
       ))}
 
       <div className="text-center space-y-6 relative z-20">
-        {/* Teks Kecil Pembuka */}
         <motion.p 
           variants={itemVariants}
           className="text-[10px] tracking-[0.6em] text-sky-600 font-bold uppercase italic opacity-80"
@@ -61,7 +65,6 @@ export default function Hero({ onStart, hearts }: HeroProps) {
           A Heartfelt Gift For
         </motion.p>
 
-        {/* Nama Dea dengan animasi gradasi/glow */}
         <motion.h1 
           variants={itemVariants}
           className="font-display text-6xl md:text-8xl text-slate-800 leading-tight"
@@ -69,7 +72,6 @@ export default function Hero({ onStart, hearts }: HeroProps) {
           Our Sweet <span className="text-pink-300 italic inline-block drop-shadow-sm">Dea</span> 💙
         </motion.h1>
 
-        {/* Deskripsi Singkat Biar Nggak Langsung Tombol */}
         <motion.p
           variants={itemVariants}
           className="text-slate-400 text-sm font-medium italic max-w-xs mx-auto"
@@ -77,7 +79,6 @@ export default function Hero({ onStart, hearts }: HeroProps) {
           "Sesuatu yang sederhana, khusus buat kamu yang luar biasa."
         </motion.p>
 
-        {/* Tombol dengan delay paling terakhir */}
         <motion.div variants={itemVariants} className="pt-6">
           <motion.button 
             onClick={onStart} 
@@ -94,7 +95,7 @@ export default function Hero({ onStart, hearts }: HeroProps) {
         </motion.div>
       </div>
 
-      {/* Dekorasi Tambahan: Latar Belakang Cahaya Lembut */}
+      {/* Radial Gradient Decor */}
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-pink-50/20 via-transparent to-transparent pointer-events-none" />
     </motion.section>
   );
