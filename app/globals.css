@@ -1,26 +1,24 @@
 @import "tailwindcss";
 
+@theme {
+  --color-her-primary: #7dd3fc;
+  --color-her-light: #f0f9ff;
+  
+  --font-display: var(--font-playfair);
+  --font-body: var(--font-inter);
+}
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --background: #f0f9ff;
 }
 
 body {
   background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  color: #1e293b;
+  margin: 0;
+  padding: 0;
+}
+
+.cursor-heart {
+  cursor: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='40' height='40' style='font-size:24px'>%E2%9D%A4%EF%B8%8F</svg>"), auto;
 }
