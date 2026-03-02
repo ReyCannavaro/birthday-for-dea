@@ -7,39 +7,95 @@ interface HeroProps {
 }
 
 export default function Hero({ onStart, hearts }: HeroProps) {
+  // Variabel untuk animasi sekuensial agar kode lebih rapi
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.8, // Jeda antar elemen muncul (bikin lebih smooth)
+        delayChildren: 0.5,
+      },
+    },
+  };
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 20, filter: "blur(10px)" },
+    visible: { 
+      opacity: 1, 
+      y: 0, 
+      filter: "blur(0px)",
+      transition: { duration: 1.2, ease: "easeOut" } 
+    },
+  };
+
   return (
     <motion.section 
       key="hero" 
-      initial={{ opacity: 0 }} 
-      animate={{ opacity: 1 }} 
-      exit={{ opacity: 0 }} 
-      className="h-screen flex items-center justify-center p-6 relative z-10"
+      variants={containerVariants}
+      initial="hidden"
+      animate="visible"
+      exit={{ opacity: 0, scale: 1.1, filter: "blur(20px)", transition: { duration: 0.8 } }} 
+      className="h-screen flex items-center justify-center p-6 relative z-10 overflow-hidden"
     >
+      {/* Efek Floating Hearts Background */}
       {hearts.map((style, i) => (
         <motion.div 
           key={i} 
-          animate={{ y: [0, -40, 0], opacity: [0, 0.5, 0] }} 
-          transition={{ duration: 4, delay: style.delay, repeat: Infinity }} 
-          className="absolute text-2xl text-pink-300/40 pointer-events-none" 
+          initial={{ opacity: 0 }}
+          animate={{ y: [0, -60, 0], opacity: [0, 0.4, 0], scale: [1, 1.2, 1] }} 
+          transition={{ duration: 5, delay: style.delay, repeat: Infinity }} 
+          className="absolute text-2xl text-pink-300/30 pointer-events-none" 
           style={{ top: style.top, left: style.left }}
         >
           🤍
         </motion.div>
       ))}
-      <div className="text-center space-y-4">
-        <p className="text-[10px] tracking-[0.5em] text-sky-600 font-bold uppercase italic">A Heartfelt Gift For</p>
-        <h1 className="font-display text-6xl md:text-8xl text-slate-800 leading-tight">
-          Our Sweet <span className="text-pink-300 italic">Dea</span> 💙
-        </h1>
-        <motion.button 
-          onClick={onStart} 
-          whileHover={{ scale: 1.05 }} 
-          whileTap={{ scale: 0.95 }}
-          className="mt-10 bg-white/80 backdrop-blur-md text-sky-500 border border-sky-100 px-12 py-4 rounded-full font-bold shadow-xl shadow-sky-100 hover:bg-sky-50 transition-all"
+
+      <div className="text-center space-y-6 relative z-20">
+        {/* Teks Kecil Pembuka */}
+        <motion.p 
+          variants={itemVariants}
+          className="text-[10px] tracking-[0.6em] text-sky-600 font-bold uppercase italic opacity-80"
         >
-          Buka Kejutan ✨
-        </motion.button>
+          A Heartfelt Gift For
+        </motion.p>
+
+        {/* Nama Dea dengan animasi gradasi/glow */}
+        <motion.h1 
+          variants={itemVariants}
+          className="font-display text-6xl md:text-8xl text-slate-800 leading-tight"
+        >
+          Our Sweet <span className="text-pink-300 italic inline-block drop-shadow-sm">Dea</span> 💙
+        </motion.h1>
+
+        {/* Deskripsi Singkat Biar Nggak Langsung Tombol */}
+        <motion.p
+          variants={itemVariants}
+          className="text-slate-400 text-sm font-medium italic max-w-xs mx-auto"
+        >
+          "Sesuatu yang sederhana, khusus buat kamu yang luar biasa."
+        </motion.p>
+
+        {/* Tombol dengan delay paling terakhir */}
+        <motion.div variants={itemVariants} className="pt-6">
+          <motion.button 
+            onClick={onStart} 
+            whileHover={{ 
+              scale: 1.05, 
+              backgroundColor: "rgba(240, 249, 255, 0.9)",
+              boxShadow: "0 20px 25px -5px rgb(186 230 253 / 0.5)"
+            }} 
+            whileTap={{ scale: 0.95 }}
+            className="bg-white/70 backdrop-blur-md text-sky-500 border border-sky-100 px-14 py-4 rounded-full font-bold shadow-xl shadow-sky-100/50 transition-all duration-300 group"
+          >
+            <span className="group-hover:tracking-widest transition-all duration-300">Buka Kejutan</span> ✨
+          </motion.button>
+        </motion.div>
       </div>
+
+      {/* Dekorasi Tambahan: Latar Belakang Cahaya Lembut */}
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-pink-50/20 via-transparent to-transparent pointer-events-none" />
     </motion.section>
   );
 }
